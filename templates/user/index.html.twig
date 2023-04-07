@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+    <nav>
+        <a href="{{ path('app_user_address_create') }}">Créer une adresse</a>
+        <a href="{{ path('app_bank') }}">Modifier mon solde</a>
+    </nav>
+    <main>
+        <h2>Solde : {{ user.bank.amount }}</h2>
+        {% for address in user.addresses %}
+            <div>
+                <p>{{ address.street }} {{ address.zip }} {{ address.city }}</p>
+
+                <a href="{{ path('app_user_address_update', {"id": address.id}) }}">Modifier</a>
+                <form action="{{ path('app_user_address_delete', {"id": address.id}) }}" method="post">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ address.id) }}">
+                    <button type="submit">Supprimer</button>
+                </form>
+            </div>
+
+        {% endfor %}
+    </main>
+{% endblock %}
